@@ -126,7 +126,6 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      
       {/* Header fixo no topo */}
       <Header
         userName={userData.name}
@@ -149,51 +148,6 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        {/* Cards de Estatísticas */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>🔥</Text>
-            <Text style={styles.statValue}>127</Text>
-            <Text style={styles.statLabel}>Workouts</Text>
-          </View>
-          
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>⏱️</Text>
-            <Text style={styles.statValue}>42h</Text>
-            <Text style={styles.statLabel}>Total Time</Text>
-          </View>
-          
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>📈</Text>
-            <Text style={styles.statValue}>+5kg</Text>
-            <Text style={styles.statLabel}>Progress</Text>
-          </View>
-        </View>
-
-        {/* Quick Actions */}
-        <View style={styles.quickActionsCard}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          
-          <View style={styles.actionButton}>
-            <Text style={styles.actionIcon}>🏋️</Text>
-            <Text style={styles.actionText}>Start New Workout</Text>
-          </View>
-          
-          <View style={styles.actionButton}>
-            <Text style={styles.actionIcon}>📊</Text>
-            <Text style={styles.actionText}>View Progress</Text>
-          </View>
-          
-          <View style={styles.actionButton}>
-            <Text style={styles.actionIcon}>🎯</Text>
-            <Text style={styles.actionText}>Set New Goal</Text>
-          </View>
-          
-          <View style={styles.actionButton}>
-            <Text style={styles.actionIcon}>📝</Text>
-            <Text style={styles.actionText}>Log Food</Text>
-          </View>
-        </View>
       </ScrollView>
 
       {/* Bottom Navigation fixo na parte inferior */}

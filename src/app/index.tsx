@@ -9,11 +9,14 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
+  Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 import Field from '@/components/elementsUI/Field';
 import Button from '@/components/elementsUI/Button';
 import { router } from 'expo-router';
+
+const API_URL = 'http://localhost:8000/api/auth/login/';
 
 const { width, height } = Dimensions.get('window');
 
@@ -125,10 +128,7 @@ export default function LoginScreen() {
     let hasError = false;
 
     if (!email.trim()) {
-      setEmailError('Email é obrigatório');
-      hasError = true;
-    } else if (!validateEmail(email)) {
-      setEmailError('Por favor, insira um email válido.');
+      setEmailError('Email/Username é obrigatório');
       hasError = true;
     }
 
@@ -142,16 +142,46 @@ export default function LoginScreen() {
 
     if (hasError) return;
 
-    // Simular chamada de API
+    // Chamada real da API
     setIsLoading(true);
-    
+
     try {
-      router.push('/home');
-      
-      // Sucesso - navegue para a próxima tela
-      console.log('O login foi um sucesso', { email, password });
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: email, // O backend espera "username"
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login bem-sucedido
+        console.log('Login bem-sucedido:', data);
+        
+        // Armazene o token se o backend retornar
+        // await AsyncStorage.setItem('authToken', data.token);
+        // await AsyncStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Navegue para a home
+        router.push('/home');
+      } else {
+        // Erro de autenticação
+        const errorMessage = data.message || data.detail || 'Credenciais inválidas';
+        setPasswordError(errorMessage);
+        Alert.alert('Erro de Login', errorMessage);
+      }
     } catch (error) {
-      setPasswordError('Credenciais inválidas. Por favor, tente novamente.');
+      console.error('Erro ao fazer login:', error);
+      setPasswordError('Erro ao conectar com o servidor. Verifique sua conexão.');
+      Alert.alert(
+        'Erro de Conexão',
+        'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -160,6 +190,7 @@ export default function LoginScreen() {
   const handleForgotPassword = () => {
     console.log('Forgot password pressed');
     // Navegar para tela de recuperação de senha
+    // router.push('/forgot-password');
   };
 
   const handleSignUp = () => {
@@ -192,8 +223,8 @@ export default function LoginScreen() {
 
         <View style={styles.formContainer}>
           <Field
-            label="Email"
-            placeholder="Seu email"
+            label="Email/Username"
+            placeholder="Seu email ou username"
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
